@@ -227,23 +227,31 @@ void visualization(int n, Robot robot, int step, Robot p[], Robot pr[])
 //####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
 int main()
 {
-    // TODO: Instantiate a robot object from the Robot class
+    //Practice Interfacing with Robot Class
     Robot myrobot;
+    myrobot.set_noise(5.0, 0.1, 5.0);
+    myrobot.set(30.0, 50.0, M_PI / 2.0);
+    myrobot.move(-M_PI / 2.0, 15.0);
+    //cout << myrobot.read_sensors() << endl;
+    myrobot.move(-M_PI / 2.0, 10.0);
+    //cout << myrobot.read_sensors() << endl;
 
-    // TODO: Set robot new position to x=30.0, y=50.0 and orientation=PI/2
-    myrobot.set(30.0,50.0,M_PI/2);
+    // Create a set of particles
+    int n = 1000;
+    Robot p[n];
 
-    // TODO: Turn clockwise by PI/2 and move by 15 meters
-    myrobot.move(-M_PI/2,15.0);
+    for (int i = 0; i < n; i++) {
+        p[i].set_noise(0.05, 0.05, 5.0);
+        //cout << p[i].show_pose() << endl;
+    }
 
-    // TODO: Print the distance from the robot toward the eight landmarks
-    cout << myrobot.read_sensors() << endl;
-
-    // TODO: Turn clockwise by PI/2 and move by 10 meters
-    myrobot.move(-M_PI/2,10.0);
-
-    // TODO: Print the distance from the robot toward the eight landmarks
-    cout << myrobot.read_sensors() << endl;    
+    //Now, simulate motion for each particle
+    Robot p2[n];
+        for (int i = 0; i < n; i++) {
+        p2[i] = p[i].move(0.1,5.0);
+        p[i] = p2[i];
+        cout << p[i].show_pose() << endl;
+    }
 
     return 0;
 }
