@@ -250,7 +250,14 @@ int main()
         for (int i = 0; i < n; i++) {
         p2[i] = p[i].move(0.1,5.0);
         p[i] = p2[i];
-        cout << p[i].show_pose() << endl;
+        //cout << p[i].show_pose() << endl;
+    }
+    
+    //Generate particle weights depending on robot's measurement
+    double w[n];
+    for (int i = 0; i < n; i++) {
+        w[i] = p[i].measurement_prob(z);
+        //cout << w[i] << endl;
     }
 
     return 0;
