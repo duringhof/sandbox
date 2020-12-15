@@ -227,7 +227,7 @@ void visualization(int n, Robot robot, int step, Robot p[], Robot pr[])
 //####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
 int main()
 {
-    //Practice Interfacing with Robot Class
+    // Practice Interfacing with Robot Class
     Robot myrobot;
     myrobot.set_noise(5.0, 0.1, 5.0);
     myrobot.set(30.0, 50.0, M_PI / 2.0);
@@ -245,7 +245,7 @@ int main()
         //cout << p[i].show_pose() << endl;
     }
 
-    //Now, simulate motion for each particle
+    // Simulate motion for each particle
     Robot p2[n];
         for (int i = 0; i < n; i++) {
         p2[i] = p[i].move(0.1,5.0);
@@ -253,7 +253,7 @@ int main()
         //cout << p[i].show_pose() << endl;
     }
     
-    //Generate particle weights depending on robot's measurement
+    // Generate particle weights depending on robot's measurement
     double w[n];
     for (int i = 0; i < n; i++) {
         w[i] = p[i].measurement_prob(z);
