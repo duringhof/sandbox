@@ -1,2 +1,2 @@
-# hobbyshelve
-Collection of codesnippets that doesn't really have another home but might have some relevance some day
+## Sandbox
+A place to just play around, having fun for a short while only... when something becomes really interesting it should actually leave this place and get a real "home".
