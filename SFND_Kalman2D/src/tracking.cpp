@@ -64,29 +64,27 @@ void Tracking::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     return;
   }
 
-  // compute the time elapsed between the current and previous measurements
+  // Compute the time elapsed between the current and previous measurements
   // dt - expressed in seconds
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;
   previous_timestamp_ = measurement_pack.timestamp_;
 
-  // TODO: YOUR CODE HERE
-  // 1. Modify the F matrix so that the time is integrated
-  kf_.F_ << 1, 0, dt,  0,
-            0, 1,  0, dt,
-            0, 0,  1,  0,
-            0, 0,  0,  1;
+  // Modify the F matrix so that the time is integrated
+  kf_.F_(0, 2) = dt;
+  kf_.F_(1, 3) = dt;
   
-  // 2. Set the process covariance matrix Q
+  // Set the process covariance matrix Q
   kf_.Q_ = MatrixXd(4, 4);
   kf_.Q_ << pow(dt,4)*noise_ax/4,                    0, pow(dt,3)*noise_ax/2,                    0,
                                0, pow(dt,4)*noise_ax/4,                    0, pow(dt,3)*noise_ay/2,
             pow(dt,3)*noise_ax/2,                    0,   pow(dt,2)*noise_ax,                    0,
                                0, pow(dt,3)*noise_ay/2,                    0,   pow(dt,2)*noise_ay;
 
-  // 3. Call the Kalman Filter predict() function
+  // Call the Kalman Filter predict() function
   kf_.Predict();
-  // 4. Call the Kalman Filter update() function
-  //      with the most recent raw measurements_
+
+  // Call the Kalman Filter update() function
+  // with the most recent raw measurements_
   kf_.Update(measurement_pack.raw_measurements_);
   
   cout << "x_= " << kf_.x_ << endl;
