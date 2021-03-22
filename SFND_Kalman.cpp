@@ -7,53 +7,47 @@
 #include <vector>
 #include "Eigen/Dense"
 
-using std::cout;
-using std::endl;
-using std::vector;
-using Eigen::VectorXd;
-using Eigen::MatrixXd;
-
 // Kalman Filter variables
-VectorXd x;	// object state
-MatrixXd P;	// object covariance matrix
-VectorXd u;	// external motion
-MatrixXd F; // state transition matrix
-MatrixXd H;	// measurement matrix
-MatrixXd R;	// measurement covariance matrix
-MatrixXd I; // Identity matrix
-MatrixXd Q;	// process covariance matrix
+Eigen::VectorXd x;	// object state
+Eigen::MatrixXd P;	// object covariance matrix
+Eigen::VectorXd u;	// external motion
+Eigen::MatrixXd F; // state transition matrix
+Eigen::MatrixXd H;	// measurement matrix
+Eigen::MatrixXd R;	// measurement covariance matrix
+Eigen::MatrixXd I; // Identity matrix
+Eigen::MatrixXd Q;	// process covariance matrix
 
-vector<VectorXd> measurements;
-void filter(VectorXd &x, MatrixXd &P);
+std::vector<Eigen::VectorXd> measurements;
+void filter(Eigen::VectorXd &x, Eigen::MatrixXd &P);
 
 int main() {
 
   // design the KF with 1D motion
-  x = VectorXd(2);
+  x = Eigen::VectorXd(2);
   x << 0, 0;
 
-  P = MatrixXd(2, 2);
+  P = Eigen::MatrixXd(2, 2);
   P << 1000, 0, 0, 1000;
 
-  u = VectorXd(2);
+  u = Eigen::VectorXd(2);
   u << 0, 0;
 
-  F = MatrixXd(2, 2);
+  F = Eigen::MatrixXd(2, 2);
   F << 1, 1, 0, 1;
 
-  H = MatrixXd(1, 2);
+  H = Eigen::MatrixXd(1, 2);
   H << 1, 0;
 
-  R = MatrixXd(1, 1);
+  R = Eigen::MatrixXd(1, 1);
   R << 1;
 
-  I = MatrixXd::Identity(2, 2);
+  I = Eigen::MatrixXd::Identity(2, 2);
 
-  Q = MatrixXd(2, 2);
+  Q = Eigen::MatrixXd(2, 2);
   Q << 0, 0, 0, 0;
   
   // create a list of measurements
-  VectorXd single_meas(1);
+  Eigen::VectorXd single_meas(1);
   single_meas << 1;
   measurements.push_back(single_meas);
   single_meas << 2;
@@ -67,24 +61,16 @@ int main() {
   return 0;
 }
 
-void filter(VectorXd &x, MatrixXd &P) {
+void filter(Eigen::VectorXd &x, Eigen::MatrixXd &P) {
 
   for (unsigned int n = 0; n < measurements.size(); ++n) {
 
-    VectorXd z = measurements[n];
+    Eigen::VectorXd z = measurements[n];
     
     // KF Measurement update step
-    MatrixXd Z(1, 1);
-    Z << measurements[n];
-
-    MatrixXd y(1, 1);
-    y << Z - (H * x);
-
-    MatrixXd S(1, 1);
-    S << H * P * H.transpose() + R;
-
-    MatrixXd K(2, 1);
-    K << P * H.transpose() * S.inverse();
+    Eigen::VectorXd y = z - (H * x);
+    Eigen::MatrixXd S = H * P * H.transpose() + R;
+    Eigen::MatrixXd K = P * H.transpose() * S.inverse();
 
     // new state
     x << x + (K * y);
@@ -94,7 +80,7 @@ void filter(VectorXd &x, MatrixXd &P) {
     x << (F * x) + u;
     P << F * P * F.transpose();
 		
-    cout << "x=" << endl <<  x << endl;
-    cout << "P=" << endl <<  P << endl;
+    std::cout << "x=" << std::endl <<  x << std::endl;
+    std::cout << "P=" << std::endl <<  P << std::endl;
   }
 }
