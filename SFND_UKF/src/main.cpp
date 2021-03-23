@@ -1,0 +1,19 @@
+#include <iostream>
+#include "Eigen/Dense"
+#include "ukf.h"
+
+using Eigen::MatrixXd;
+
+int main() {
+
+  // Create a UKF instance
+  UKF ukf;
+
+  MatrixXd Xsig = MatrixXd(5, 11);
+  ukf.GenerateSigmaPoints(&Xsig);
+
+  // print result
+  std::cout << "Xsig = " << std::endl << Xsig << std::endl;
+
+  return 0;
+}
